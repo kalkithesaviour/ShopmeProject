@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "users")
@@ -35,7 +36,7 @@ public class User {
 	private String lastName;
 
 	@Column(length = 64)
-	private String photos;
+	private String photo;
 
 	private boolean enabled;
 
@@ -47,8 +48,7 @@ public class User {
 			)
 	private Set<Role> roles = new HashSet<>();
 
-	public User() {
-	}
+	public User() {}
 
 	public User(String email, String password, String firstName, String lastName) {
 		this.email = email;
@@ -97,12 +97,12 @@ public class User {
 		this.lastName = lastName;
 	}
 
-	public String getPhotos() {
-		return photos;
+	public String getPhoto() {
+		return photo;
 	}
 
-	public void setPhotos(String photos) {
-		this.photos = photos;
+	public void setPhoto(String photo) {
+		this.photo = photo;
 	}
 
 	public boolean getEnabled() {
@@ -129,6 +129,13 @@ public class User {
 	public String toString() {
 		return "User [id=" + id + ", email=" + email + ", firstName=" + firstName + ", lastName=" + lastName
 				+ ", roles=" + roles + "]";
+	}
+	
+	@Transient
+	public String getPhotoPath() {
+		if (id == null || photo == null) return "/images/default-user.png";
+		
+		return "/user-photos/" + id + "/" + photo;
 	}
 
 }
